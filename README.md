@@ -1,5 +1,4 @@
-# c411-suite-hefied
-# C411 Suite Ultra Pro ✦
+# ✦ C411 Suite Ultra Pro ✦
 
 > Userscript Tampermonkey pour **C411.org** — Popup TMDB Netflix-style, filtres avancés séries/films, boutons DL / Hash / AllDebrid inline, badge d'état.
 
