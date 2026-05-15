@@ -40,6 +40,7 @@ Directement sous chaque ligne torrent, sans ouvrir la fiche :
 
 ### 📺 Tags colorés automatiques
 Sur chaque ligne : type, saison (S01, S02…), intégrale, qualité, langue
+
 <img width="266" height="35" alt="image" src="https://github.com/user-attachments/assets/0c62b6f3-0dce-49ac-bcb4-150987bbf4ed" />
 
 ### ✦ Badge PLUS
