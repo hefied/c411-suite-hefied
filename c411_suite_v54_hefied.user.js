@@ -1056,7 +1056,7 @@
 
             el.innerHTML=`
                 <div class="c411f-hdr">
-                    <div class="c411f-logo"><div class="c411f-dot"></div>C411 · Filtres — Hefied</div>
+                    <div class="c411f-logo"><div class="c411f-dot"></div>C411 · Filtres</div>
                     <div style="display:flex;align-items:center;gap:7px">
                         <div id="c411f-stats"><strong id="c411f-count">—</strong> / <span id="c411f-total">—</span> résultats</div>
                         <button class="c411f-toggle" id="c411f-toggle"><span class="c411f-arrow">▼</span><span id="c411f-tlbl">Réduire</span></button>
