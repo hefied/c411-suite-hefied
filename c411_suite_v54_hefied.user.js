@@ -848,45 +848,74 @@
             }
         }
 
-        // ── Injecter les boutons inline sous les badges d'une ligne ──────────
+        // ── CSS minimal pour les boutons-badges ───────────────────────────────
+        function injectRowBtnCSS() {
+            if (document.getElementById('c411-rbtn-css')) return;
+            const s = document.createElement('style'); s.id = 'c411-rbtn-css';
+            s.textContent = `
+                .c411-rbtn{display:inline-flex;align-items:center;font-size:10px;padding:1.5px 6px;border-radius:4px;font-weight:600;cursor:pointer;border:none;outline:none;transition:filter 120ms,transform 100ms;user-select:none;white-space:nowrap;line-height:1.4;vertical-align:middle}
+                .c411-rbtn:active{transform:scale(.92)}
+                .c411-rbtn.--dl  {background:rgba(52,211,153,.12);color:#34d399}
+                .c411-rbtn.--dl:hover{filter:brightness(1.4)}
+                .c411-rbtn.--hash{background:rgba(148,163,184,.1);color:#94a3b8}
+                .c411-rbtn.--hash:hover{filter:brightness(1.5)}
+                .c411-rbtn.--ad  {background:rgba(251,146,60,.12);color:#fb923c}
+                .c411-rbtn.--ad:hover{filter:brightness(1.4)}
+                .c411-rbtn.--ad.--spin{opacity:.5;pointer-events:none}
+                .c411-rbtn.--ad.--ok{background:rgba(52,211,153,.12);color:#34d399;pointer-events:none}
+                .c411-rbtn.--ad.--err{background:rgba(239,68,68,.12);color:#f87171}
+            `;
+            document.head.appendChild(s);
+        }
+
+        // ── Injecter les boutons dans la même zone que les badges C411 ─────────
         function addRowButtons(row, data) {
             const desktop = row.querySelector('.lg\\:grid .min-w-0');
             if (!desktop) return;
 
-            // La zone des badges C411 existants (langue, etc.)
-            const badgeZone = desktop.querySelector('div.flex.items-center.gap-1\\.5');
-            if (!badgeZone) return;
+            // Anti-doublon
+            if (desktop.querySelector('.c411-rbtn')) return;
 
-            // Créer le conteneur de boutons
-            const btns = document.createElement('div');
-            btns.className = 'c411-row-btns';
+            // Trouver la zone badge — div flex qui contient les <span> badges langue
+            // C411 génère : <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+            //                  <span class="text-[10px] ...">MULTI</span>
+            //               </div>
+            // On cherche ce div, ou on le crée s'il n'existe pas (lignes sans badge)
+            let zone = desktop.querySelector('[class*="flex"][class*="items-center"][class*="gap-1"]')
+                    || desktop.querySelector('[class*="flex"][class*="flex-wrap"]')
+                    || desktop.querySelector('[class*="flex"][class*="items-center"]');
 
+            if (!zone) {
+                // Ligne sans badge langue : créer la zone
+                zone = document.createElement('div');
+                zone.className = 'flex items-center gap-1.5 mt-0.5 flex-wrap';
+                const pp = desktop.querySelector('posterhoverpopover');
+                if (pp) pp.insertAdjacentElement('afterend', zone);
+                else    desktop.appendChild(zone);
+            }
+
+            injectRowBtnCSS();
             const hasAD = CFG.ALLDEBRID_KEY && CFG.ALLDEBRID_KEY !== 'VOTRE_CLE_ALLDEBRID_ICI';
 
-            // ── Bouton Télécharger ──────────────────────────────────────────────
+            // ── ⬇ DL ───────────────────────────────────────────────────────────
             const dlBtn = document.createElement('button');
-            dlBtn.className = 'c411-rbtn --dl';
-            dlBtn.title     = 'Télécharger le torrent';
-            dlBtn.innerHTML = '⬇ DL';
+            dlBtn.className   = 'c411-rbtn --dl';
+            dlBtn.title       = 'Télécharger le torrent';
+            dlBtn.textContent = '⬇ DL';
             dlBtn.addEventListener('click', e => {
                 e.stopPropagation(); e.preventDefault();
                 const nativeDl = DOM.getDownloadBtn(row);
-                if (nativeDl) {
-                    nativeDl.click();
-                    toast('✓ Téléchargement lancé', 'ok');
-                } else if (data.linkHref) {
-                    window.open(data.linkHref, '_blank');
-                } else {
-                    toast('⚠ Bouton introuvable', 'err');
-                }
+                if (nativeDl) { nativeDl.click(); toast('✓ Téléchargement lancé', 'ok'); }
+                else if (data.linkHref) { window.open(data.linkHref, '_blank'); }
+                else { toast('⚠ Bouton introuvable', 'err'); }
             });
 
-            // ── Bouton Hash ─────────────────────────────────────────────────────
+            // ── # Hash ─────────────────────────────────────────────────────────
             const hashBtn = document.createElement('button');
-            hashBtn.className = 'c411-rbtn --hash';
-            hashBtn.title     = data.hash ? `Copier le hash : ${data.hash}` : 'Hash indisponible';
-            hashBtn.innerHTML = '# Hash';
-            if (!data.hash) hashBtn.style.opacity = '.35';
+            hashBtn.className   = 'c411-rbtn --hash';
+            hashBtn.title       = data.hash ? `Hash : ${data.hash}` : 'Hash indisponible';
+            hashBtn.textContent = '# Hash';
+            if (!data.hash) hashBtn.style.opacity = '.4';
             hashBtn.addEventListener('click', e => {
                 e.stopPropagation(); e.preventDefault();
                 if (!data.hash) { toast('⚠ Hash introuvable', 'err'); return; }
@@ -895,28 +924,23 @@
                     toast(`✓ Hash copié : ${data.hash.slice(0,12)}…`, 'ok');
                     hashBtn.textContent = '✓ Copié';
                     setTimeout(() => { hashBtn.textContent = '# Hash'; }, 2000);
-                } else {
-                    toast('⚠ Copie impossible', 'err');
-                }
+                } else { toast('⚠ Copie impossible', 'err'); }
             });
 
-            // ── Bouton AllDebrid ────────────────────────────────────────────────
+            // ── 🟠 AD ──────────────────────────────────────────────────────────
             const adBtn = document.createElement('button');
-            adBtn.className = 'c411-rbtn --ad';
-            adBtn.title     = hasAD ? 'Envoyer à AllDebrid' : 'Clé AllDebrid non configurée';
-            adBtn.innerHTML = '🟠 AD';
-            if (!hasAD) adBtn.style.opacity = '.35';
-            if (!data.hash) adBtn.style.opacity = '.35';
+            adBtn.className   = 'c411-rbtn --ad';
+            adBtn.title       = hasAD ? 'Envoyer à AllDebrid' : 'Clé AllDebrid non configurée';
+            adBtn.textContent = '🟠 AD';
+            if (!hasAD || !data.hash) adBtn.style.opacity = '.4';
             adBtn.addEventListener('click', async e => {
                 e.stopPropagation(); e.preventDefault();
                 if (!data.hash) { toast('⚠ Hash introuvable', 'err'); return; }
                 await sendToAllDebrid(data.hash, data.rawName, adBtn);
             });
 
-            btns.append(dlBtn, hashBtn, adBtn);
-
-            // Insérer les boutons juste après la zone badges
-            badgeZone.insertAdjacentElement('afterend', btns);
+            // Ajouter à la fin de la zone badge (après les spans C411 existants)
+            zone.append(dlBtn, hashBtn, adBtn);
         }
 
         // ── Décorer une ligne (tags + boutons) ───────────────────────────────
