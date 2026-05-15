@@ -63,7 +63,7 @@ Sur chaque ligne : type, saison (S01, S02…), intégrale, qualité, langue
 ### 2. Installer le script
 Cliquer sur ce lien (Tampermonkey reconnaît automatiquement l'extension `.user.js`) :
 
-**→ [Installer C411 Suite v5.4](../../raw/main/c411_suite_v54_hefied.user.js)**
+**→🚀 [Installer C411 Suite v5.4](../../raw/main/c411_suite_v54_hefied.user.js)🚀**
 
 Ou manuellement : Tampermonkey → **Nouveau script** → coller le contenu du fichier → Sauvegarder.
 
