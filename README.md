@@ -16,6 +16,7 @@
 - Skeleton loader pendant le chargement
 - Cache 7 jours (localStorage + persistant)
 - Support films ET séries
+<img width="1212" height="470" alt="image" src="https://github.com/user-attachments/assets/a57d91a8-38d1-4507-bc5c-942b0ba5d425" />
 
 ### 🔍 Filtres avancés client-side
 - Recherche texte libre instantanée
@@ -28,22 +29,25 @@
 - Compteur de résultats en temps réel
 - Presets sauvegardables
 - Raccourcis clavier : `Alt+F` focus, `Alt+R` reset, `ESC` vider texte
+<img width="1627" height="389" alt="image" src="https://github.com/user-attachments/assets/1a50ded6-aa8c-4ced-8171-64d0493d8108" />
 
 ### ⬇ Boutons d'action inline
 Directement sous chaque ligne torrent, sans ouvrir la fiche :
 - **⬇ DL** — télécharge le torrent via le bouton natif C411
 - **# Hash** — copie le hash torrent dans le presse-papier
 - **🟠 AD** — envoie le magnet à AllDebrid en 1 clic
+<img width="397" height="77" alt="image" src="https://github.com/user-attachments/assets/a3f29567-1847-405a-8ede-31b5508f73d0" />
 
 ### 📺 Tags colorés automatiques
 Sur chaque ligne : type, saison (S01, S02…), intégrale, qualité, langue
+<img width="266" height="35" alt="image" src="https://github.com/user-attachments/assets/0c62b6f3-0dce-49ac-bcb4-150987bbf4ed" />
 
 ### ✦ Badge PLUS
 - Indicateur visuel que le script est actif (coin haut-droit)
 - Draggable, position mémorisée
 - Carte de statut au survol (modules actifs, compteur live)
 - S'adapte au resize de la fenêtre
-
+<img width="1505" height="388" alt="image" src="https://github.com/user-attachments/assets/cbb5fbbf-204c-47bf-9ec1-2cf8215d19c0" />
 ---
 
 ## 📦 Installation
